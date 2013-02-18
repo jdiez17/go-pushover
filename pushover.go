@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+    "errors"
 )
 
 const endpoint string = "https://api.pushover.net/1/messages.json"
+var PushoverError = errors.New("PushoverError")
 
 type Pushover struct {
 	User, Apikey string
@@ -60,5 +62,8 @@ func (p Pushover) Notify(n Notification) (*Response, error) {
 
 	response := new(Response)
 	err = json.Unmarshal(body, response)
-	return response, err
+    if err != nil {
+        return nil, err
+    }
+	return response, PushoverError 
 }
