@@ -2,15 +2,16 @@ package pushover
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
-    "errors"
 )
 
 const endpoint string = "https://api.pushover.net/1/messages.json"
+
 var PushoverError = errors.New("PushoverError")
 
 type Pushover struct {
@@ -62,8 +63,8 @@ func (p Pushover) Notify(n Notification) (*Response, error) {
 
 	response := new(Response)
 	err = json.Unmarshal(body, response)
-    if err != nil {
-        return nil, err
-    }
-	return response, PushoverError 
+	if err != nil {
+		return nil, err
+	}
+	return response, PushoverError
 }
