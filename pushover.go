@@ -15,7 +15,7 @@ const endpoint string = "https://api.pushover.net/1/messages.json"
 var PushoverError = errors.New("PushoverError")
 
 type Pushover struct {
-	User, Apikey string
+	UserKey, AppKey string
 }
 
 type Response struct {
@@ -32,8 +32,8 @@ type Notification struct {
 
 func (n Notification) toValues(p Pushover) url.Values {
 	return url.Values{
-		"token":     {p.Apikey},
-		"user":      {p.User},
+		"user":      {p.UserKey},
+		"token":     {p.AppKey},
 		"message":   {n.Message},
 		"title":     {n.Title},
 		"url":       {n.Url},
