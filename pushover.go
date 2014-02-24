@@ -25,9 +25,9 @@ type Response struct {
 }
 
 type Notification struct {
-	Message, Title, Url, UrlTitle, Sound, Device string
-	Timestamp                                    time.Time
-	Priority                                     float64
+	Message, Title, Url, UrlTitle, Sound, Device, Callback string
+	Timestamp time.Time
+	Priority, Retry, Expire float64
 }
 
 func (n Notification) toValues(p Pushover) url.Values {
@@ -41,6 +41,10 @@ func (n Notification) toValues(p Pushover) url.Values {
 		"sound":     {n.Sound},
 		"device":    {n.Device},
 		"timestamp": {fmt.Sprintf("%d", n.Timestamp.Unix())},
+		"priority":  {fmt.Sprintf("%d", n.Priority)},
+		"retry":     {fmt.Sprintf("%d", n.Retry)},
+		"expire":    {fmt.Sprintf("%d", n.Expire)},
+		"callback":  {n.Callback},
 	}
 }
 
