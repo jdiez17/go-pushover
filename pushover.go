@@ -19,7 +19,7 @@ type Pushover struct {
 }
 
 type Response struct {
-	Status  float64
+	Status  int
 	Errors  []interface{}
 	Message string
 }
@@ -27,7 +27,7 @@ type Response struct {
 type Notification struct {
 	Message, Title, Url, UrlTitle, Sound, Device, Callback string
 	Timestamp time.Time
-	Priority, Retry, Expire float64
+	Priority, Retry, Expire int
 }
 
 func (n Notification) toValues(p Pushover) url.Values {

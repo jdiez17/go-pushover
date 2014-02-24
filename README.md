@@ -21,19 +21,24 @@ func main() {
         "", /* Application key (use your own) */
     }
 
-    ts := time.Now()
     n := pushover.Notification {
         Title: "go-pushover",
         Message: "Hello from Go!",
-        Timestamp: ts,
+        Timestamp: time.Now(),
+        Priority: 2,
+        Retry: 30,
+        Expire: 90,
     }
 
     response, err := p.Notify(n)
+
     if err != nil {
         if err != pushover.PushoverError {
             panic(err)
+        } else {
+            fmt.Println(err)
+            fmt.Println(response)
         }
-        fmt.Println(response.Message)
     }
 }
 ```
