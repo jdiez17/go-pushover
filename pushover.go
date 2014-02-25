@@ -15,25 +15,25 @@ const endpoint string = "https://api.pushover.net/1/messages.json"
 var PushoverError = errors.New("PushoverError")
 
 type Pushover struct {
-	User, Apikey string
+	UserKey, AppKey string
 }
 
 type Response struct {
-	Status  float64
+	Status  int
 	Errors  []interface{}
 	Message string
 }
 
 type Notification struct {
-	Message, Title, Url, UrlTitle, Sound, Device string
-	Timestamp                                    time.Time
-	Priority                                     float64
+	Message, Title, Url, UrlTitle, Sound, Device, Callback string
+	Timestamp time.Time
+	Priority, Retry, Expire int
 }
 
 func (n Notification) toValues(p Pushover) url.Values {
 	return url.Values{
-		"token":     {p.Apikey},
-		"user":      {p.User},
+		"user":      {p.UserKey},
+		"token":     {p.AppKey},
 		"message":   {n.Message},
 		"title":     {n.Title},
 		"url":       {n.Url},
@@ -41,6 +41,10 @@ func (n Notification) toValues(p Pushover) url.Values {
 		"sound":     {n.Sound},
 		"device":    {n.Device},
 		"timestamp": {fmt.Sprintf("%d", n.Timestamp.Unix())},
+		"priority":  {fmt.Sprintf("%d", n.Priority)},
+		"retry":     {fmt.Sprintf("%d", n.Retry)},
+		"expire":    {fmt.Sprintf("%d", n.Expire)},
+		"callback":  {n.Callback},
 	}
 }
 
