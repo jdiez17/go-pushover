@@ -16,6 +16,7 @@ var PushoverError = errors.New("PushoverError")
 
 type Pushover struct {
 	UserKey, AppKey string
+	Client          *http.Client
 }
 
 type Response struct {
@@ -49,7 +50,13 @@ func (n Notification) toValues(p Pushover) url.Values {
 }
 
 func (p Pushover) Notify(n Notification) (*Response, error) {
-	resp, err := http.PostForm(endpoint, n.toValues(p))
+
+	client := p.Client
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	resp, err := client.PostForm(endpoint, n.toValues(p))
 
 	if err != nil {
 		return nil, err
